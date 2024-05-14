@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: exampledb  # Changed from postgres to exampledb
+      POSTGRES_USER: user     # Changed from admin to user
+      POSTGRES_PASSWORD: password # Changed from qwer to password
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./schema.json:/usr/src/app/schema.json  # Mounting the schema.json into the container
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+
+  # Other services...
+  pgsync:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - elasticsearch
+volumes:
+  postgres-data:
+  elasticsearch-data:
+

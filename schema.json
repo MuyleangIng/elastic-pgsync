@@ -1,0 +1,39 @@
+{
+  "elasticsearch": {
+    "host": "localhost",
+    "port": 9200,
+    "user": "elastic",
+    "password": "your_password"
+  },
+  "postgres": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "exampledb",
+    "user": "user",
+    "password": "password"
+  },
+  "schema": [
+    {
+      "database": "exampledb",
+      "index": "example_index",
+      "nodes": [
+        {
+          "table": "your_table",
+          "columns": ["id", "data"],
+          "children": [
+            {
+              "table": "child_table",
+              "columns": ["id", "parent_id", "info"],
+              "relation": {
+                "type": "foreign_key",
+                "parent_column": "id",
+                "child_column": "parent_id"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
